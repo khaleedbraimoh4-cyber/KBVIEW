@@ -1,0 +1,133 @@
+﻿@page
+@model IndexModel
+@using KBVIEW.Model;
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<header>
+
+
+    <div class="category-header">
+
+        <div class=" category-links">
+            @*asp-page creates a link to another page in the project*@
+            @*cat-btn is the CSS class that styles these as category buttons*@
+            <a asp-page="/Movies" class="cat-btn">Movies</a>
+            <a asp-page="/TVShows" class="cat-btn">TV Shows</a>
+            <a asp-page="/Anime" class="cat-btn">Anime</a>
+            <a asp-page="/AllGenres" class="cat-btn">All Genres</a>
+        </div>
+        <div class="search-bar">
+            @* method="get" means the search term is sent through the URL *@
+            <form method="get" class="search-form">
+                @*name="Query" matches the Query property in IndexModel*@
+                @*value="@Model.Query" keeps the search term in the box after the user has searched so they can see what they typed*@
+                <input name="Query" value="@Model.Query" type="text" placeholder="Search..." />
+                <button type="submit">submit</button>
+                @* <span>Search</span> *@
+            </form>
+        </div>
+        <div class="user-header">
+            @{
+                var userEmail = HttpContext.Session.GetString("UserEmail");
+                var username = HttpContext.Session.GetString("Username");
+            }
+
+            @* used for Selection if a session exists show the username link, if not show the login link instead*@
+            @if (!string.IsNullOrEmpty(userEmail))
+            {
+                <a asp-page="/UserProfile">@username</a>
+            }
+            else
+            {
+                <a asp-page="/Login">Login</a>
+            }
+            <div class="avatar"></div>
+        </div>
+    </div>
+
+
+</header>
+    
+    
+<div class="hold">
+      <div class="main-content">
+          <div class="film-carousel">
+            @*only show the carousel if a featured movie was found, If the API did not return anything show a loading message instead*@
+            @if (Model.FeaturedMovie != null)
+            {
+                <div class="carousel-poster">
+                    @*GetPosterUrl builds the full image address from the poster path that TMDB returns*@
+                    <img src="@Model.GetPosterUrl(Model.FeaturedMovie.PosterPath)" alt="@Model.FeaturedMovie.Title" />
+                </div>
+                <div class="carousel-info">
+                    <h2 class="carousel-title">@Model.FeaturedMovie.Title</h2>
+                    <div class="carousel-meta">
+                        <p class="carousel-date">@Model.FeaturedMovie.ReleaseDate</p>
+                        @*ToString("0.0") formats the rating to one decimal place*@
+                    <div class="carousel-score">⭐ @Model.FeaturedMovie.VoteAverage.ToString("0.0")</div>
+                    </div>
+                    <p class="carousel-overview">@Model.FeaturedMovie.Overview</p>
+                </div>
+            }
+            else
+            {
+                <p style="color: white;">Loading featured movie...</p>
+            }
+              
+          </div>
+
+        <div class="recommendation">
+            
+               <h3>Recommendation For You</h3>
+              <div class="card-grid">
+                @*loop through every movie in the list and create a card for each one*@
+                @foreach(var movie in Model.Movies)
+                {
+                    <a asp-page="/MovieDetails" asp-route-Id="@movie.Id" class="movie-card-link">
+                        <div class="movie-card">
+                            <div class="card-image-wrapper">
+                                <img class="card-image" src="@Model.GetPosterUrl(movie.PosterPath)" alt="@movie.Title" />
+                                <div class="rating">⭐ @movie.VoteAverage.ToString("0.0")</div>
+                            </div>
+                            <h4 class="card-title">@movie.Title</h4>
+                        </div>
+                    </a>
+                }
+
+              </div>
+        </div>
+      </div>
+   
+   
+        <div class="top-ratings">
+            <h3>TOP MOVIE RATINGS</h3>
+
+              <div class="rating-list">
+            @*loop through the top rated list and create a smaller list item for each one *@
+            @foreach(var movie in Model.TopRated)
+            {
+                <div class="rating-item">
+                    <div class="rating-poster">
+                        <img src="@Model.GetPosterUrl(movie.PosterPath)" alt="@movie.Title" />
+                    </div>
+                    <div class="rating-info">
+                        <p class="rating-title">@movie.Title</p>
+                        <span class="rating-score">⭐ @movie.VoteAverage.ToString("0.0")</span>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+        </div>
+
+
+</div>
+
+     
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/index.css" />
+}

@@ -1,0 +1,40 @@
+﻿@page
+@model KBVIEW.Pages.MovieDetailsModel
+@{
+    ViewData["Title"] = Model.Movie?.Title ?? "Movie Details";
+}
+
+@if (Model.Movie != null)
+{
+    <div class="movie-details">
+        <div class="details-backdrop">
+            <img src="@Model.GetPosterUrl(Model.Movie.PosterPath)" alt="@Model.Movie.Title" />
+        </div>
+        
+        <div class="details-content">
+            <h1>@Model.Movie.Title</h1>
+            
+            <div class="details-meta">
+                <span class="rating">⭐ @Model.Movie.VoteAverage.ToString("0.0")</span>
+                <span>@Model.Movie.ReleaseDate</span>
+                <span>@Model.Movie.Runtime min</span>
+            </div>
+            
+            @if (Model.Movie.Genres != null && Model.Movie.Genres.Any())
+            {
+                <div class="genres">
+                    @foreach(var genre in Model.Movie.Genres)
+                    {
+                        <span class="genre-tag">@genre.Name</span>
+                    }
+                </div>
+            }
+            
+            <p class="overview">@Model.Movie.Overview</p>
+        </div>
+    </div>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/moviedetails.css" />
+}

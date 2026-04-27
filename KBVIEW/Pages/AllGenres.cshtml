@@ -1,0 +1,81 @@
+﻿@page
+@model KBVIEW.Pages.AllGenresModel
+@{
+    ViewData["Title"] = "All Genres";
+}
+
+<header>
+
+    <div class="category-header">
+
+        <div class=" category-links">
+            <a asp-page="/Movies" class="cat-btn">Movies</a>
+            <a asp-page="/TVShows" class="cat-btn">TV Shows</a>
+            <a asp-page="/Anime" class="cat-btn">Anime</a>
+            <a asp-page="/AllGenres" class="cat-btn">All Genres</a>
+        </div>
+        <div class="search-bar">
+            <form method="get" class="search-form">
+                <input name="Query" type="text" placeholder="Search..." />
+                <button type="submit">submit</button>
+                @* <span>Search</span> *@
+            </form>
+        </div>
+        <div class="user-header">
+            <a asp-page="/UserProfile"> User Profile</a>
+            <div class="avatar"></div>
+        </div>
+    </div>
+
+</header>
+
+
+<div class="page-header">
+    <h1>Browse by Genre</h1>
+</div>
+
+<div class="genre-filters">
+    <a asp-page="/AllGenres" class="genre-btn">
+        All
+    </a>
+
+    @foreach (var genre in Model.Genres)
+    {
+        <a asp-page="/AllGenres"
+           asp-route-SelectedGenre="@genre.Id"
+           class="genre-btn @(Model.SelectedGenre == genre.Id ? "active" : "")">
+            @*Selection: if this genre matches the one selected
+              add the "active" CSS class to highlight the button
+              if not leave the class empty so it looks normal*@
+            @genre.Name
+        </a>
+    }
+</div>
+
+
+<div class="card-grid">
+    @*Selection: check if there are any movies to show*@
+    @if (Model.Movies.Any())
+    {
+        @foreach (var movie in Model.Movies)
+        {
+            <div class="movie-card">
+                <div class="card-image-wrapper">
+                    <img class="card-image" src="@Model.GetPosterUrl(movie.PosterPath)" alt="@movie.Title" />
+                    <div class="rating">⭐ @movie.VoteAverage.ToString("0.0")</div>
+                </div>
+                <h4 class="card-title">@movie.Title</h4>
+            </div>
+        }
+    }
+    else
+    {
+        <p style="color: white; grid-column: 1/-1; text-align: center;">No movies found.</p>
+    }
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/index.css" />
+    <link rel="stylesheet" href="~/css/movies.css" />
+    <link rel="stylesheet" href="~/css/genres.css" />
+}

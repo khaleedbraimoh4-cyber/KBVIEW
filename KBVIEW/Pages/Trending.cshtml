@@ -1,0 +1,68 @@
+﻿@page
+@model KBVIEW.Pages.TrendingModel
+@{
+    ViewData["Title"] = "Trending";
+}
+
+<header>
+
+
+    <div class="category-header">
+
+        <div class=" category-links">
+            <a asp-page="/Movies" class="cat-btn">Movies</a>
+            <a asp-page="/TVShows" class="cat-btn">TV Shows</a>
+            <a asp-page="/Anime" class="cat-btn">Anime</a>
+            <a asp-page="/AllGenres" class="cat-btn">All Genres</a>
+        </div>
+        <div class="search-bar">
+            <form method="get" class="search-form">
+                <input name="Query" value="@Model.Query" type="text" placeholder="Search..." />
+                <button type="submit">submit</button>
+                @* <span>Search</span> *@
+            </form>
+        </div>
+        <div class="user-header">
+            @{
+                var userEmail = HttpContext.Session.GetString("UserEmail");
+                var username = HttpContext.Session.GetString("Username");
+            }
+
+            @if (!string.IsNullOrEmpty(userEmail))
+            {
+                <a asp-page="/UserProfile">@username</a>
+            }
+            else
+            {
+                <a asp-page="/Login">Login</a>
+            }
+            <div class="avatar"></div>
+        </div>
+    </div>
+
+
+</header>
+
+<div class="page-header">
+    <h1>Trending This Week</h1>
+</div>
+
+<div class="card-grid">
+    @foreach(var movie in Model.Movies)
+    {
+        <a asp-page="/MovieDetails" asp-route-Id="@movie.Id" class="movie-card-link">
+            <div class="movie-card">
+                <div class="card-image-wrapper">
+                    <img class="card-image" src="@Model.GetPosterUrl(movie.PosterPath)" alt="@movie.Title" />
+                    <div class="rating">⭐ @movie.VoteAverage.ToString("0.0")</div>
+                </div>
+                <h4 class="card-title">@movie.Title</h4>
+            </div>
+        </a>
+    }
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/movies.css" />
+    <link rel="stylesheet" href="~/css/index.css" />
+}

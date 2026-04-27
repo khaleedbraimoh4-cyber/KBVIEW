@@ -1,0 +1,63 @@
+﻿@page
+@model KBVIEW.Pages.TVShowsModel
+@{
+    ViewData["Title"] = "TV Shows";
+}
+
+<header>
+
+
+    <div class="category-header">
+
+        <div class=" category-links">
+            <a asp-page="/Movies" class="cat-btn">Movies</a>
+            <a asp-page="/TVShows" class="cat-btn">TV Shows</a>
+            <a asp-page="/Anime" class="cat-btn">Anime</a>
+            <a asp-page="/AllGenres" class="cat-btn">All Genres</a>
+        </div>
+        <div class="search-bar">
+            <form method="get" class="search-form">
+                <input name="Query" value="@Model.Query" type="text" placeholder="Search..." />
+                <button type="submit">submit</button>
+                @* <span>Search</span> *@
+            </form>
+        </div>
+        <div class="user-header">
+            <a asp-page="/UserProfile"> User Profile</a>
+            <div class="avatar"></div>
+        </div>
+    </div>
+
+
+</header>
+
+
+<div class="page-header">
+    <h1>Popular TV Shows</h1>
+</div>
+
+<div class="card-grid">
+    @if (Model.TVShows.Any())
+    {
+        @foreach (var show in Model.TVShows)
+        {
+            <div class="movie-card">
+                <div class="card-image-wrapper">
+                    <img class="card-image" src="@Model.GetPosterUrl(show.PosterPath)" alt="@show.Name" />
+                    <div class="rating">⭐ @show.VoteAverage.ToString("0.0")</div>
+                </div>
+                <h4 class="card-title">@show.Name</h4>
+            </div>
+        }
+    }
+    else
+    {
+        <p style="color: white; grid-column: 1/-1; text-align: center;">No TV shows found.</p>
+    }
+</div>
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/movies.css" />
+    <link rel="stylesheet" href="~/css/index.css" />
+}

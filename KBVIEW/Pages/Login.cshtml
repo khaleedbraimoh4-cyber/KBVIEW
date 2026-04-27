@@ -1,0 +1,64 @@
+﻿@page
+@model KBVIEW.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+    // Layout = null;
+}
+
+<html>
+<head>
+    <title>Login - KBVIEW</title>
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1>KBVIEW</h1>
+            <h2>Login</h2>
+
+            @*Demo account details shown on the page
+              so the system can be tested without registering *@
+            <div class="demo-info">
+                <strong>Demo Accounts:</strong><br>
+                khaleed@test.com / password123<br>
+                admin@kbview.com / admin
+            </div>
+
+            @*only show the error box if there is an error message 
+              ErrorMessage is set in LoginModel when login fails*@
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="error">@Model.ErrorMessage</div>
+            }
+            @*method="post" means the form data is sent to OnPost
+            in LoginModel when the button is clicked*@
+            <form method="post">
+                <div class="form-group">
+                    <label>Email</label>
+                    @*type="email" checks the format before submitting
+                     required means the field cannot be left empty*@
+                    <input type="email" name="Email" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    @*type="password" hides the characters as they are typed*@
+                    <input type="password" name="Password" required />
+                </div>
+
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            @*Link to the register page for users who do not have an account*@
+            <p class="link">Don't have an account? <a asp-page="/Register">Register</a></p>
+
+        </div>
+    </div>
+</body>
+
+
+
+</html>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth.css" />
+}

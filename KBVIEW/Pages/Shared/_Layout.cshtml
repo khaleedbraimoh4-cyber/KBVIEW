@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KBVIEW</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/KBVIEW.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+
+</head>
+<body>
+
+    <div class="dashBoard">
+        <aside class="sideBar">
+            <div class="logo">KBVIEW</div>
+                <div class="menu-heading">Menu</div>
+
+            @{
+                var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+            }
+            
+            <nav class="side-nav-bar">
+
+                <a asp-page="/Index" class="navi-btn @(currentPage == "/Index" ? "active" : "")">Home</a>
+                <a asp-page="/Trending" class="navi-btn @(currentPage == "/Trending" ? "active" : "")">Trending</a>
+                <a asp-page="/Recent" class="navi-btn @(currentPage == "/Recent" ? "active" : "")">Recent</a>
+                <a asp-page="/Discover" class="navi-btn @(currentPage == "/Discover" ? "active" : "")">Discover</a>
+                <a asp-page="/Playlist" class="navi-btn @(currentPage == "/Playlist" ? "active" : "")">Playlist</a>
+                <a asp-page="/TopRated" class="navi-btn @(currentPage == "/TopRated" ? "active" : "")">Top Rated</a>
+                <a asp-page="/Watchlist" class="navi-btn @(currentPage == "/Watchlist" ? "active" : "")">Watchlist</a>
+                <a asp-page="/Community" class="navi-btn @(currentPage == "/Community" ? "active" : "")">Community</a>
+                <a asp-page="/Settings" class="navi-btn @(currentPage == "/Settings" ? "active" : "")">Settings</a>
+                <a asp-page="/LogOut" class="navi-btn">Log out</a>
+
+            </nav>
+        </aside>
+
+        <div class="mainPage">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+  
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
